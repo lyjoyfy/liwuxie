@@ -32,8 +32,17 @@ jobs:
           echo "Contents of dist/ directory:"
           ls -l dist/
 
+      - name: Check if dist/ exists
+        id: check-dist
+        run: |
+          if [ -d "dist/" ]; then
+            echo "dist_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "dist_exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Upload artifact
-        if: success() && exists('dist/')
+        if: steps.check-dist.outputs.dist_exists == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: macOS-App
