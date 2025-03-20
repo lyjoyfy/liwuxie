@@ -25,7 +25,7 @@ jobs:
 
       - name: Build macOS app
         run: |
-          pyinstaller --noconsole --onefile --windowed  下载UPC图片.py
+          pyinstaller --noconsole --onefile --windowed   下载UPC图片.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
