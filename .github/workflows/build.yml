@@ -27,15 +27,14 @@ jobs:
         run: |
           pyinstaller --noconsole --onefile --windowed 下载UPC图片.py
 
-      - name: Zip the application
+      - name: Debug dist directory
         run: |
-          zip -r macOS-App.zip dist/
-        shell: bash
+          echo "Contents of dist/ directory:"
+          ls -l dist/
 
-      - name: Upload artifact using curl
-        run: |
-          curl -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/zip" \
-            --data-binary @macOS-App.zip \
-            "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.run_id }}/assets?name=macOS-App.zip"
+      - name: Upload artifact
+        if: success() && exists('dist/')
+        uses: actions/upload-artifact@v3
+        with:
+          name: macOS-App
+          path: dist/
