@@ -1,7 +1,37 @@
-      - name: Upload artifact
+name: Build macOS App
+
+on:
+  push:
+    branches:
+      - main  # 触发构建的分支
+
+jobs:
+  build:
+    runs-on: macos-latest  # 使用 macOS 环境
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # 替换为你的 Python 版本
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build macOS app
+        run: |
+          pyinstaller --noconsole --onefile --windowed 下载UPC图片.py
+
+      - name: Zip the application
         run: |
           zip -r macOS-App.zip dist/
         shell: bash
+
       - name: Upload artifact using curl
         run: |
           curl -X POST \
